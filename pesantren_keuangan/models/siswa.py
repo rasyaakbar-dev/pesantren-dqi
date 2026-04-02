@@ -13,7 +13,8 @@ class SiswaInherit(models.Model):
         ('bulan', 'Bulan'),
     ], string='Periode')
 
-    amount = fields.Float(string="Total", digits=(16, 0))
+    amount = fields.Float(string="Total", digits=(16, 0),
+                          default=lambda self: self.env.company.standard_limit_amount)
     used_amount = fields.Float(
         string="Jumlah Terpakai", digits=(16, 0), default=0)
     limit_reset_date = fields.Datetime(

@@ -12,7 +12,8 @@ class MassLimit(models.TransientModel):
             ('minggu', 'Perminggu'),
             ('bulan', 'Bulan'),
         ], default='hari', string='Periode')
-    limit_amount = fields.Float(string="Jumlah Limit", required=True, digits=(16, 0))
+    limit_amount = fields.Float(string="Jumlah Limit", required=True, digits=(16, 0),
+                                default=lambda self: self.env.company.standard_limit_amount)
 
     kelas = fields.Many2many('cdn.ruang_kelas')
 

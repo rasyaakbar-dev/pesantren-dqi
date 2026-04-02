@@ -43,7 +43,8 @@ class SetLimitSantri(models.TransientModel):
         ('bulan', 'Bulan'),
     ], default='hari', string='Periode')
 
-    amount = fields.Float(string="Total", digits=(16, 0))
+    amount = fields.Float(string="Total", digits=(16, 0),
+                          default=lambda self: self.env.company.standard_limit_amount)
 
     def action_set_limit(self):
         self.ensure_one()

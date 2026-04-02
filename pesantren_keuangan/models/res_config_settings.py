@@ -12,3 +12,5 @@ class ResConfigSettings(models.TransientModel):
         related='company_id.limit_reset_hour', readonly=False)
     max_wallet = fields.Float(
         related='company_id.max_wallet', readonly=False)
+    standard_limit_amount = fields.Float(
+        related='company_id.standard_limit_amount', readonly=False)

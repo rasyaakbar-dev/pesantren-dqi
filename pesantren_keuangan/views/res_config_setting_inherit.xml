@@ -29,6 +29,10 @@
                                     <field name="limit_reset_hour" class="oe_inline" />
                                     <span class="ml8">WIB (Format 24 Jam)</span>
                                 </div>
+                                <label for="standard_limit_amount" />
+                                <div class="o_setting_right_pane">
+                                    <field name="standard_limit_amount" class="oe_inline" />
+                                </div>
                             </group>
                         </block>
                     </app>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Form View -->
+        <record id="invoice_diagnostic_wizard_form" model="ir.ui.view">
+            <field name="name">invoice.diagnostic.wizard.form</field>
+            <field name="model">invoice.diagnostic.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Diagnosa Invoice">
+                    <group>
+                        <group>
+                            <field name="partner_id" placeholder="Kosongkan untuk semua santri"/>
+                        </group>
+                        <group>
+                            <field name="inconsistent_invoice_count" string="Invoice Bermasalah"/>
+                        </group>
+                    </group>
+                    
+                    <group string="Hasil Diagnosa">
+                        <field name="result_message" nolabel="1" readonly="1" 
+                               widget="text" style="font-family: monospace; white-space: pre-wrap;"/>
+                    </group>
+                    
+                    <footer>
+                        <button name="action_diagnose" string="🔍 Diagnosa" type="object" class="btn-primary"/>
+                        <button name="action_fix_payment_state" string="🔧 Perbaiki Payment State" type="object" class="btn-warning"
+                                invisible="inconsistent_invoice_count == 0"/>
+                        <button name="action_view_invoices" string="📋 Lihat Invoice" type="object" class="btn-secondary"
+                                invisible="inconsistent_invoice_count == 0"/>
+                        <button string="Tutup" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_invoice_diagnostic_wizard" model="ir.actions.act_window">
+            <field name="name">Diagnosa Invoice</field>
+            <field name="res_model">invoice.diagnostic.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <!-- Menu Item - Under Keuangan Configuration or Tagihan -->
+        <menuitem id="menu_invoice_diagnostic"
+                  name="🔧 Diagnosa Invoice"
+                  parent="pesantren_keuangan.keu_tagihan_menu_categ"
+                  action="action_invoice_diagnostic_wizard"
+                  sequence="99"
+                  groups="base.group_system"/>
+    </data>
+</odoo>

@@ -1,0 +1,51 @@
+<odoo>
+    <data>
+        <record id="res_config_settings_view_form" model="ir.ui.view">
+            <field name="name">pesantren.keuangan.config.settings</field>
+            <field name="model">res.config.settings</field>
+            <field name="priority" eval="15" />
+            <field name="inherit_id" ref="base.res_config_settings_view_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="inside">
+                    <app data-string="Keuangan Management" string="Keuangan Management"
+                        name="pesantren_keuangan"
+                        web_icon="pesantren_keuangan,static/description/icon.png">
+                        <block title="Pengaturan Keuangan Management" name="pesantren_management">
+                            <group string="Pengaturan Dompet" name="group_wallet">
+                                <field name="max_wallet" string="Saldo Dompet Maksimal" />
+                            </group>
+                            <group string="Pengaturan Reset Limit Penggunaan Saldo"
+                                name="group_limit_reset">
+                                <label for="limit_weekly_reset_day" />
+                                <div class="o_setting_right_pane">
+                                    <field name="limit_weekly_reset_day" class="oe_inline" />
+                                </div>
+                                <label for="limit_monthly_reset_day" />
+                                <div class="o_setting_right_pane">
+                                    <field name="limit_monthly_reset_day" class="oe_inline" />
+                                </div>
+                                <label for="limit_reset_hour" />
+                                <div class="o_setting_right_pane">
+                                    <field name="limit_reset_hour" class="oe_inline" />
+                                    <span class="ml8">WIB (Format 24 Jam)</span>
+                                </div>
+                            </group>
+                        </block>
+                    </app>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="res_config_settings_action" model="ir.actions.act_window">
+            <field name="name">Configuration</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.config.settings</field>
+            <field name="view_mode">form</field>
+            <field name="target">inline</field>
+            <field name="context">{'module' : 'pesantren_keuangan'}</field>
+        </record>
+
+        <menuitem id="pesantren_keuangan_config_menu" name="Konfigurasi"
+            parent="keu_tagihan_menu_categ" action="res_config_settings_action" sequence="100" />
+    </data>
+</odoo>

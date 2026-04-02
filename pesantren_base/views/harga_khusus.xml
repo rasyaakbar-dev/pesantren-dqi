@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <!-- cdn.harga_khusus list view -->
+        <record id="cdn_harga_khusus_view_tree" model="ir.ui.view">
+            <field name="name">cdn.harga_khusus.view.list</field>
+            <field name="model">cdn.harga_khusus</field>
+            <field name="arch" type="xml">
+                <list string="Harga Khusus Diskon">
+                    <field name="name" />
+                    <field name="siswa_id"
+                        options="{'no_create_edit':True, 'no_create':True, 'no_open': True}"
+                        string="Nama Santri" />
+                    <!-- <field name="partner_id"/> -->
+                    <field name="disc_amount" />
+                    <field name="disc_persen" />
+                    <field name="keterangan" />
+                    <field name="state" widget="badge" />
+                </list>
+            </field>
+        </record>
+        <!-- cdn.harga_khusus form view -->
+        <record id="cdn_harga_khusus_view_form" model="ir.ui.view">
+            <field name="name">cdn.harga_khusus.view.form</field>
+            <field name="model">cdn.harga_khusus</field>
+            <field name="arch" type="xml">
+                <form string="Harga Khusus Diskon">
+                    <header>
+                        <field name="state" widget="statusbar" readonly="1" />
+                        <!-- Status Field with Status Bar -->
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="siswa_id"
+                                    options="{'no_create_edit':True, 'no_create':True, 'no_open': True}"
+                                    string="Nama Santri" />
+                                <field name="name" />
+                                <field name="disc_persen" />
+                                <field name="keterangan" />
+                            </group>
+                            <group>
+                                <field name="partner_id" string="ID Santri" />
+                                <field name="price" widget="integer" />
+                                <field name="disc_amount" />
+                                <field name="expired_date" />
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

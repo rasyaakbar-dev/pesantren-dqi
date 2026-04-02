@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_smart_billing_transaction_user,smart.billing.transaction user,model_smart_billing_transaction,base.group_user,1,0,0,0
+access_smart_billing_transaction_manager,smart.billing.transaction manager,model_smart_billing_transaction,account.group_account_manager,1,1,1,1
+access_smart_billing_topup_wizard,smart.billing.topup.wizard,model_smart_billing_topup_wizard,base.group_user,1,1,1,1
+access_smart_billing_pilih_anak_wizard,smart.billing.pilih.anak.wizard,model_smart_billing_pilih_anak_wizard,base.group_user,1,1,1,1
+access_smart_billing_test_wizard,smart.billing.test.wizard,model_smart_billing_test_wizard,account.group_account_manager,1,1,1,1

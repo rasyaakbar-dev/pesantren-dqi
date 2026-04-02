@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- cdn.absensi_malam list view -->
+        <record id="cdn_absensi_malam_view_tree" model="ir.ui.view">
+            <field name="name">cdn.absensi_malam.view.list</field>
+            <field name="model">cdn.absensi_malam</field>
+            <field name="arch" type="xml">
+                <list default_order="id desc">
+                    <field name="row_number" string="#" />
+                    <field name="name"/>
+                    <field name="tgl"/>
+                    <field name="kamar_id"/>
+                    <field name="musyrif_id"/>
+                    <field name="company_id" optional="hide"/>
+                    <field name="state"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Search view -->
+        <record id="cdn_absensi_malam_view_search" model="ir.ui.view">
+            <field name="name">cdn.absensi_malam.view.search</field>
+            <field name="model">cdn.absensi_malam</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name" string="Data" filter_domain="[
+                            '|', ('name', 'ilike', self),
+                            '|', ('tgl', 'ilike', self),
+                            '|', ('kamar_id.name', 'ilike', self),
+                            '|', ('musyrif_id.name', 'ilike', self),
+                            '|', ('absen_ids.siswa_id.name', 'ilike', self),
+                            '|', ('absen_ids.siswa_id.nis', 'ilike', self),
+                            '|', ('state', 'ilike', self),
+                            ('keterangan', 'ilike', self)
+                        ]" />
+                    <filter string="Hari Ini" name="today" domain="[('tgl', '=', context_today())]"/>
+                    <separator/>
+                    <filter string="Draft" name="filter_draft" domain="[('state','=','draft')]"/>
+                    <filter string="Selesai" name="filter_done" domain="[('state','=','done')]"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- Form view -->
+        <record id="cdn_absensi_malam_view_form" model="ir.ui.view">
+            <field name="name">cdn.absensi_malam.view.form</field>
+            <field name="model">cdn.absensi_malam</field>
+            <field name="arch" type="xml">
+                <form string="Absensi Malam Santri">
+                    <header>
+                        <button string="Proses" name="action_proses" type="object" class="oe_highlight" invisible="state in ['proses','done']"/>
+                        <button string="Done" name="action_done" type="object" class="oe_highlight" invisible="state in ['done','draft']"/>
+                        <button string="Ubah ke Draft" name="action_draft" type="object" class="btn btn-secondary" invisible="state == 'draft'"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,proses,done"/>
+                    </header>
+                    <sheet>
+                        <!-- Filter Absensi Malam -->
+                        <group string="Absensi Malam">
+                            <group>
+                                <field name="tgl" readonly="state == 'done'"/>
+                                <field name="fiscalyear_id" readonly="1"/>
+                                <field name="company_id" 
+                                    options="{'no_create_edit':True, 'no_create':True, 'no_open': True}" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="kamar_id" options="{'no_create_edit': True, 'no_create': True}" readonly="state == 'done'"/>
+                                <field name="musyrif_id" options="{'no_create_edit': True, 'no_create': True}" readonly="state == 'done'"/>
+                                <field name="keterangan" readonly="state == 'done'"/>
+                            </group>
+                        </group>
+
+                        <!-- Daftar Kehadiran -->
+                        <notebook>
+                            <page string="Daftar Kehadiran">
+                                <field name="absen_ids" nolabel="1" widget="one2many_list" readonly="state == 'done'">
+                                    <list string="" editable="top">
+                                        <field name="row_number" string="#"/>
+                                        <field name="siswa_id" options="{'no_create_edit': True, 'no_create': True}" string="Santri"/>
+                                        <field name="panggilan" string="Panggilan"/>
+                                        <field name="nis"/>
+                                        <field name="kamar_id"/>
+                                        <field 
+                                            name="kehadiran_absen"
+                                            decoration-bf="True"
+                                            decoration-danger="kehadiran_absen=='Alpa'" 
+                                            decoration-warning="kehadiran_absen=='Izin' or kehadiran_absen=='keluar'" 
+                                            decoration-success="kehadiran_absen=='Hadir'" 
+                                            decoration-muted="kehadiran_absen=='Sakit'"
+                                        />
+                                        <field name="keterangan"/>
+                                        <field name="keterangan_izin" filename="keterangan_izin_filename"/>
+                                        <button name="action_view_permission" string="Detail" type="object" icon="fa-eye" invisible="(kehadiran_absen != 'Izin' and kehadiran_absen != 'keluar') or not keterangan" class="btn-primary"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Sequence -->
+        <record id="sequence_absensi_malam" model="ir.sequence">
+            <field name="name">Absensi Malam Santri</field>
+            <field name="code">cdn.absensi_malam</field>
+            <field name="prefix">AM/%(y)s.%(month)s/</field>
+            <field name="padding">4</field>
+            <field name="number_increment">1</field>
+            <field name="implementation">standard</field>
+        </record>
+
+        <!-- Action Window -->
+        <record id="cdn_absensi_malam_action" model="ir.actions.act_window">
+            <field name="name">Absensi Malam Santri</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">cdn.absensi_malam</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Klik untuk membuat absensi malam santri baru.
+                </p>
+                <p>
+                    Catat kehadiran santri setiap malam secara massal berdasarkan Kamar, Halaqoh, atau Kelas.
+                </p>
+            </field>
+        </record>
+
+        <!-- Menu -->
+        <menuitem id="absensi_malam_menu_act" name="Absensi Malam Santri" parent="kepesantrenan_kepengasuhan_menu_categ" action="cdn_absensi_malam_action" sequence="11"/>
+    </data>
+</odoo>

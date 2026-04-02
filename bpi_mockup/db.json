@@ -1,0 +1,82 @@
+{
+  "billings": [
+    {
+      "trx_id": "TRX-12345",
+      "trx_amount": "100000",
+      "customer_name": "John Doe",
+      "virtual_account": "988123456789",
+      "datetime_expired": "2026-12-31T23:59:59+0700",
+      "status": "settlement",
+      "created_at": "2026-03-30T06:44:18.881Z",
+      "paid_at": "2026-03-30T08:48:13.443Z"
+    },
+    {
+      "trx_id": "TAG-INV202600013-20260330083742",
+      "trx_amount": "11101",
+      "customer_name": "Ahmad Arvhie Arsyanendra",
+      "virtual_account": "001260330083742",
+      "datetime_expired": "2026-03-31T08:37:42+0700",
+      "description": "Pembayaran TAG-INV202600013-20260330083742",
+      "status": "settlement",
+      "created_at": "2026-03-30T08:37:42.694Z",
+      "paid_at": "2026-03-30T08:40:59.101Z"
+    },
+    {
+      "trx_id": "TAG-INV202600014-20260330084905",
+      "trx_amount": "0",
+      "customer_name": "Ahmad Arvhie Arsyanendra",
+      "virtual_account": "001260330084905",
+      "datetime_expired": "2026-03-31T08:49:21+0700",
+      "description": "Updated billing TAG-INV202600014-20260330084905",
+      "status": "settlement",
+      "created_at": "2026-03-30T08:49:05.539Z",
+      "paid_at": "2026-03-30T08:49:17.638Z",
+      "updated_at": "2026-03-30T08:49:21.189Z"
+    },
+    {
+      "trx_id": "TAG-INV202600015-20260330085625",
+      "trx_amount": "11100",
+      "customer_name": "Ahmad Arvhie Arsyanendra",
+      "virtual_account": "001260330085625",
+      "datetime_expired": "2026-03-31T08:56:25+0700",
+      "description": "Pembayaran TAG-INV202600015-20260330085625",
+      "status": "settlement",
+      "created_at": "2026-03-30T08:56:25.303Z",
+      "paid_at": "2026-03-30T08:56:29.682Z"
+    },
+    {
+      "trx_id": "TAG-INV202600016-20260330085718",
+      "trx_amount": "11100",
+      "customer_name": "Muhammad Arzanka Zahran",
+      "virtual_account": "001260330085718",
+      "datetime_expired": "2026-03-31T08:57:18+0700",
+      "description": "Pembayaran TAG-INV202600016-20260330085718",
+      "status": "settlement",
+      "created_at": "2026-03-30T08:57:18.932Z",
+      "paid_at": "2026-03-30T08:57:30.075Z"
+    },
+    {
+      "trx_id": "TAG-INV202600011-20260330090744",
+      "trx_amount": "1",
+      "customer_name": "Ahmad Arvhie Arsyanendra",
+      "virtual_account": "001260330090744",
+      "datetime_expired": "2026-03-31T09:07:44+0700",
+      "description": "Pembayaran TAG-INV202600011-20260330090744",
+      "status": "settlement",
+      "created_at": "2026-03-30T09:07:44.501Z",
+      "paid_at": "2026-03-30T09:08:09.790Z"
+    }
+  ],
+  "virtual_accounts": [
+    {
+      "customerNo": "111222333444",
+      "virtualAccountName": "Santri Tester",
+      "virtualAccountEmail": "tester@example.com",
+      "virtualAccountPhone": "08123456789",
+      "totalAmount": {
+        "value": 150000,
+        "currency": "IDR"
+      }
+    }
+  ]
+}

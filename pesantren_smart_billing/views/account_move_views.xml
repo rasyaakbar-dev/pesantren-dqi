@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- Inherit Invoice Form to add BSI Smart Billing buttons -->
+        <record id="view_move_form_smart_billing" model="ir.ui.view">
+            <field name="name">account.move.form.smart.billing</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form" />
+            <field name="arch" type="xml">
+                <!-- Add BSI Billing buttons in header -->
+                <xpath expr="//header" position="inside">
+                    <!-- Tombol Kirim Billing BSI (hanya tampil jika belum ada billing) -->
+                    <button name="action_send_bsi_billing" type="object"
+                        string="Kirim Billing BSI" class="btn-primary"
+                        invisible="state != 'posted' or payment_state == 'paid' or move_type != 'out_invoice' or bsi_billing_sent"
+                        groups="account.group_account_invoice" />
+
+                    <!-- Tombol Update Billing BSI (hanya tampil jika sudah ada billing) -->
+                    <button name="action_update_bsi_billing" type="object"
+                        string="Update Billing BSI" class="btn-warning"
+                        invisible="state != 'posted' or payment_state == 'paid' or move_type != 'out_invoice' or not bsi_billing_sent"
+                        groups="account.group_account_invoice" />
+
+                    <!-- Tombol Hapus Billing BSI (hanya tampil jika sudah ada billing) -->
+                    <button name="action_delete_bsi_billing" type="object"
+                        string="Hapus Billing BSI" class="btn-danger"
+                        invisible="state != 'posted' or payment_state == 'paid' or move_type != 'out_invoice' or not bsi_billing_sent"
+                        groups="account.group_account_invoice"
+                        confirm="Apakah Anda yakin ingin menghapus billing ini dari BSI? Billing tidak akan bisa dibayar lagi." />
+                </xpath>
+
+                <!-- Add BSI Billing info section -->
+                <group>
+                    <xpath expr="//group[@id='header_left_group']" position="after">
+                        <group string="BSI Smart Billing"
+                            invisible="move_type != 'out_invoice' or state != 'posted'">
+                            <group>
+                                <field name="bsi_billing_sent" invisible="1" />
+                                <field name="has_pending_smart_billing" invisible="1" />
+                                <field name="bsi_billing_order_id" readonly="1"
+                                    invisible="not bsi_billing_sent" />
+                                <field name="smart_billing_va_number" readonly="1" string="Nomor VA" />
+                                <field name="smart_billing_va_bank" readonly="1" string="Bank" />
+                            </group>
+                            <group>
+                                <div invisible="not bsi_billing_sent">
+                                    <button name="action_send_va_whatsapp" type="object"
+                                        string="Kirim VA ke WhatsApp" class="btn-success" />
+                                </div>
+                            </group>
+                        </group>
+                        <!-- Info alerts - full width below the fields -->
+                        <div class="alert alert-success" role="alert"
+                            invisible="move_type != 'out_invoice' or state != 'posted' or not bsi_billing_sent">
+                            <strong>Billing Aktif di BSI</strong>
+                            <p class="mb-0">
+                                Orang tua bisa bayar via BSI Mobile → Transfer → Virtual Account
+                            </p>
+                        </div>
+                        <div class="alert alert-info" role="alert"
+                            invisible="move_type != 'out_invoice' or state != 'posted' or bsi_billing_sent">
+                            <p class="mb-0"> Klik <strong>"Kirim Billing BSI"</strong> untuk
+                                mengirim tagihan ke BSI Smart Billing </p>
+                        </div>
+                    </xpath>
+                </group>
+
+                <!-- Add Smart Billing transactions tab -->
+                <xpath expr="//notebook" position="inside">
+                    <page string="Smart Billing" invisible="move_type != 'out_invoice'"
+                        name="smart_billing_page">
+                        <div class="alert alert-info" role="alert">
+                            <strong>Riwayat Transaksi Smart Billing</strong>
+                            <p class="mb-0">
+                                Semua transaksi billing BSI untuk invoice ini tercatat di sini.
+                                Status akan otomatis update saat ada pembayaran dari BSI.
+                            </p>
+                        </div>
+                        <field name="smart_billing_transaction_ids" readonly="1">
+                            <list decoration-success="state == 'settlement'"
+                                decoration-warning="state == 'pending'"
+                                decoration-danger="state in ['expired', 'cancel']">
+                                <field name="name" string="Order ID" />
+                                <field name="provider" />
+                                <field name="transaction_type" />
+                                <field name="va_number" />
+                                <field name="va_bank" />
+                                <field name="gross_amount" widget="monetary" />
+                                <field name="transaction_time" />
+                                <field name="settlement_time" />
+                                <field name="state" widget="badge" />
+                            </list>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+        
+        <!-- Server Action: Kirim Billing BSI Massal (Bulk) -->
+        <record id="action_send_bsi_billing_bulk" model="ir.actions.server">
+            <field name="name">Kirim Billing BSI Massal</field>
+            <field name="model_id" ref="account.model_account_move"/>
+            <field name="binding_model_id" ref="account.model_account_move"/>
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">
+records.action_send_bsi_billing_bulk()
+            </field>
+        </record>
+
+        <!-- Server Action: Reset ke Draft Massal -->
+        <record id="action_reset_draft_bulk" model="ir.actions.server">
+            <field name="name">Reset ke Draft Massal</field>
+            <field name="model_id" ref="account.model_account_move"/>
+            <field name="binding_model_id" ref="account.model_account_move"/>
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">
+records.button_draft()
+            </field>
+        </record>
+    </data>
+</odoo>

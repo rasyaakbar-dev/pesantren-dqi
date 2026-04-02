@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+        <record model="ir.module.category" id="module_category_kesantrian">
+            <field name="name">Kesantrian</field>
+            <field name="description">Group Kesantrian</field>
+            <field name="sequence">10</field>
+        </record>
+
+        <record id="group_kesantrian_user" model="res.groups">
+            <field name="name">User</field>
+            <field name="category_id" ref="module_category_kesantrian"/>
+        </record>
+        <record id="group_kesantrian_staff" model="res.groups">
+            <field name="name">Staff</field>
+            <field name="category_id" ref="module_category_kesantrian"/>
+            <field name="implied_ids" eval="[(4, ref('group_kesantrian_user'))]"/>
+        </record>
+        <record id="group_kesantrian_manager" model="res.groups">
+            <field name="name">Manager</field>
+            <field name="category_id" ref="module_category_kesantrian"/>
+            <field name="implied_ids" eval="[(4, ref('group_kesantrian_staff'))]"/>
+            <field name="users" eval="[(4, ref('base.user_admin'))]"/>
+        </record>
+
+        <!-- kesehatan -->
+        <record id="group_kesantrian_kesehatan" model="res.groups">
+            <field name="name">Kesantrian Kesehatan</field>
+            <field name="users" eval="[(4, ref('base.user_admin'))]"/>
+            <field name="category_id" ref="pesantren_base.module_category_alhamra"/>
+        </record>
+
+        <!-- keamanan -->
+        <record id="group_kesantrian_keamanan" model="res.groups">
+            <field name="name">Kesantrian Keamanan</field>
+            <field name="users" eval="[(4, ref('base.user_admin'))]"/>
+            <field name="category_id" ref="pesantren_base.module_category_alhamra"/>
+        </record>
+
+        <!-- orang tua -->
+        <record id="group_kesantrian_orang_tua" model="res.groups">
+            <field name="name">Orang Tua</field>
+            <field name="users" eval="[(4, ref('base.user_admin'))]"/>
+            <field name="category_id" ref="pesantren_base.module_category_alhamra"/>
+        </record>
+
+        <record id="group_kesantrian_orang_tua_acces_limit" model="res.groups">
+            <field name="name">Akses Limit Orang Tua</field>
+            <field name="users" eval="[(4, ref('base.user_admin'))]"/>
+            <field name="category_id" ref="pesantren_base.module_category_alhamra"/>
+        </record>
+
+        <!-- Halaqoh -->
+        <record id="halaqoh_company_rule" model="ir.rule">
+            <field name="name">Halaqoh companies</field>
+            <field name="model_id" ref="model_cdn_halaqoh"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <!-- Absensi Halaqoh -->
+        <record id="absen_halaqoh_company_rule" model="ir.rule">
+            <field name="name">Absensi Halaqoh companies</field>
+            <field name="model_id" ref="model_cdn_absen_halaqoh"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <!-- Absensi Halaqoh Line -->
+        <record id="absen_halaqoh_line_company_rule" model="ir.rule">
+            <field name="name">Absensi Halaqoh Line companies</field>
+            <field name="model_id" ref="model_cdn_absen_halaqoh_line"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <!-- Penilaian Halaqoh -->
+        <record id="penilaian_halaqoh_company_rule" model="ir.rule">
+            <field name="name">Penilaian Halaqoh companies</field>
+            <field name="model_id" ref="model_cdn_penilaian_quran"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <!-- Mutaba'ah Harian -->
+        <record id="mutabaah_harian_company_rule" model="ir.rule">
+            <field name="name">Mutaba'ah Harian companies</field>
+            <field name="model_id" ref="model_cdn_mutabaah_harian"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <!-- Absensi Malam -->
+        <record id="absen_malam_company_rule" model="ir.rule">
+            <field name="name">Absensi Malam companies</field>
+            <field name="model_id" ref="model_cdn_absensi_malam"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <!-- Absensi Malam Line -->
+        <record id="absen_malam_line_company_rule" model="ir.rule">
+            <field name="name">Absensi Malam Line companies</field>
+            <field name="model_id" ref="model_cdn_absensi_malam_line"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <!-- Pelanggaran -->
+        <record id="pelanggaran_company_rule" model="ir.rule">
+            <field name="name">Pelanggaran companies</field>
+            <field name="model_id" ref="model_cdn_pelanggaran"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <!-- Perijinan -->
+        <record id="perijinan_company_rule" model="ir.rule">
+            <field name="name">Perijinan companies</field>
+            <field name="model_id" ref="model_cdn_perijinan"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <!-- Kesehatan -->
+        <record id="kesehatan_company_rule" model="ir.rule">
+            <field name="name">Kesehatan companies</field>
+            <field name="model_id" ref="model_cdn_kesehatan"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <!-- Prestasi Siswa -->
+        <record id="prestasi_siswa_company_rule" model="ir.rule">
+            <field name="name">Prestasi Siswa companies</field>
+            <field name="model_id" ref="model_cdn_prestasi_siswa"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+    </data>
+</odoo>

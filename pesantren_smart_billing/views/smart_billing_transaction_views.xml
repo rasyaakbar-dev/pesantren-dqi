@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- Smart Billing Transaction List View -->
+        <record id="smart_billing_transaction_view_list" model="ir.ui.view">
+            <field name="name">smart.billing.transaction.list</field>
+            <field name="model">smart.billing.transaction</field>
+            <field name="arch" type="xml">
+                <list string="Smart Billing Transactions" decoration-success="state == 'settlement'"
+                    decoration-info="state == 'active'" decoration-warning="state == 'pending'"
+                    decoration-danger="state in ['expired', 'cancelled', 'failed']">
+                    <field name="name" />
+                    <field name="provider" />
+                    <field name="transaction_type" />
+                    <field name="partner_id" />
+                    <field name="siswa_id" />
+                    <field name="va_number" />
+                    <field name="va_bank" />
+                    <field name="gross_amount" widget="monetary" />
+                    <field name="transaction_time" />
+                    <field name="state" widget="badge" decoration-success="state == 'settlement'"
+                        decoration-info="state == 'active'" decoration-warning="state == 'pending'"
+                        decoration-danger="state in ['expired', 'cancelled', 'failed']" />
+                </list>
+            </field>
+        </record>
+
+        <!-- Smart Billing Transaction Form View -->
+        <record id="smart_billing_transaction_view_form" model="ir.ui.view">
+            <field name="name">smart.billing.transaction.form</field>
+            <field name="model">smart.billing.transaction</field>
+            <field name="arch" type="xml">
+                <form string="Smart Billing Transaction">
+                    <header>
+                        <button name="action_check_status" type="object" string="Check Status"
+                            class="btn-primary" invisible="state not in ['pending', 'active']" />
+                        <button name="action_simulate_payment" type="object"
+                            string="Simulasi Pembayaran (Testing)" class="btn-success"
+                            invisible="state != 'pending' or provider != 'dummy'"
+                            confirm="Ini akan mensimulasikan pembayaran untuk testing. Invoice terkait akan otomatis ter-reconcile. Lanjutkan?" />
+                        <button name="action_cancel" type="object" string="Cancel"
+                            class="btn-secondary" invisible="state not in ['pending', 'active']"
+                            confirm="Are you sure you want to cancel this transaction?" />
+                        <field name="state" widget="statusbar"
+                            statusbar_visible="pending,active,settlement" />
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1" force_save="1" />
+                            </h1>
+                        </div>
+                        <group>
+                            <group string="Transaction Info">
+                                <field name="provider" />
+                                <field name="transaction_type" />
+                                <field name="gross_amount" widget="monetary" />
+                                <field name="transaction_time" />
+                                <field name="settlement_time" />
+                                <field name="expiry_time" />
+                            </group>
+                            <group string="Payment Info">
+                                <field name="va_number" />
+                                <field name="va_bank" />
+                                <field name="payment_url" widget="url" />
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Related Records">
+                                <field name="partner_id" />
+                                <field name="siswa_id" />
+                                <field name="move_id" />
+                                <field name="uang_saku_id" />
+                            </group>
+                            <group string="Provider Info">
+                                <field name="provider_transaction_id" />
+                                <field name="provider_status" />
+                                <field name="notification_sent" />
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Provider Response">
+                                <field name="provider_response" readonly="1" />
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter />
+                </form>
+            </field>
+        </record>
+
+        <!-- Smart Billing Transaction Search View -->
+        <record id="smart_billing_transaction_view_search" model="ir.ui.view">
+            <field name="name">smart.billing.transaction.search</field>
+            <field name="model">smart.billing.transaction</field>
+            <field name="arch" type="xml">
+                <search string="Search Transactions">
+                    <field name="name" />
+                    <field name="partner_id" />
+                    <field name="siswa_id" />
+                    <field name="va_number" />
+                    <separator />
+                    <filter name="active" string="Active (VA)" domain="[('state', '=', 'active')]" />
+                    <filter name="pending" string="Pending (Tagihan)"
+                        domain="[('state', '=', 'pending')]" />
+                    <filter name="settled" string="Settled/Paid"
+                        domain="[('state', '=', 'settlement')]" />
+                    <filter name="expired" string="Expired" domain="[('state', '=', 'expired')]" />
+                    <separator />
+                    <filter name="va_tagihan" string="VA Tagihan"
+                        domain="[('transaction_type', '=', 'va_tagihan')]" />
+                    <filter name="va_topup" string="VA Top-up"
+                        domain="[('transaction_type', '=', 'va_topup')]" />
+                    <filter name="payment_link" string="Payment Link"
+                        domain="[('transaction_type', '=', 'payment_link')]" />
+                    <separator />
+                    <filter name="today" string="Today"
+                        domain="[('transaction_time', '&gt;=', datetime.datetime.combine(context_today(), datetime.time(0,0,0)))]" />
+                    <filter name="this_week" string="This Week"
+                        domain="[('transaction_time', '&gt;=', (context_today() - relativedelta(days=7)).strftime('%Y-%m-%d'))]" />
+                    <filter name="this_month" string="This Month"
+                        domain="[('transaction_time', '&gt;=', (context_today()).strftime('%Y-%m-01'))]" />
+                    <group expand="0" string="Group By">
+                        <filter name="group_state" string="Status" context="{'group_by': 'state'}" />
+                        <filter name="group_provider" string="Provider"
+                            context="{'group_by': 'provider'}" />
+                        <filter name="group_type" string="Type"
+                            context="{'group_by': 'transaction_type'}" />
+                        <filter name="group_siswa" string="Santri"
+                            context="{'group_by': 'siswa_id'}" />
+                        <filter name="group_date" string="Date"
+                            context="{'group_by': 'transaction_time:day'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action to open Smart Billing Transactions -->
+        <record id="action_smart_billing_transaction" model="ir.actions.act_window">
+            <field name="name">Smart Billing Transactions</field>
+            <field name="res_model">smart.billing.transaction</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="smart_billing_transaction_view_search" />
+            <field name="context">{'search_default_pending': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No transactions yet
+                </p>
+                <p>
+                    Smart Billing transactions will appear here when payments are made.
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

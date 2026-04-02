@@ -1,0 +1,50 @@
+<t t-name="owl.GuruList" owl="1">
+    <div class="row w-100 h-100 m-0" style="font-size: 0.8rem; line-height: 1.5;">
+        <div class="col-lg-12 p-0">
+            <div class="card shadow-sm border-0 rounded-0">
+                <div class="card-header d-flex justify-content-center align-items-center bg-primary text-white">
+                    <h3 class="card-title mb-0">Top Hafalan Terbanyak</h3>
+                </div>
+                <div class="card-body pt-1 p-0" style="min-height: 280px;">
+                    <t t-if="state.items.length > 0">
+                        <div style="overflow-x: auto; max-height: 280px; overflow-y: auto;">
+                            <table class="table table-hover table-striped mb-0">
+                                <thead style="position: sticky; top: 0; background-color: white; z-index: 1;">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Santri</th>
+                                        <th>Halaqah</th>
+                                        <th>Jumlah Maqro</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="state.items" t-as="guru" t-key="guru.id">
+                                        <tr style="cursor: pointer;" t-att-id="'guru-' + guru.id" t-on-click="() => this.openRecord(guru.id)">
+                                            <td>
+                                                <t t-esc="guru.number"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="guru.nama"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="guru.halaqoh"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="guru.baris"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </t>
+                    <t t-else="">
+                        <div class="text-center p-3 text-muted">
+                            <i class="fa fa-info-circle me-1"></i> Data tidak ditemukan
+                        </div>
+                    </t>
+                </div>
+            </div>
+        </div>
+    </div>
+</t>
